@@ -37,11 +37,10 @@ class UserController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'mobile'=>'required|digits_between:9,11|unique:users,mobile',
+            'mobile'=>'required|digits_between:7,9|unique:users,mobile',
             'password' => 'required|confirmed'
         ]);
 
-        // return $request;
         $result=User::create([
             'name'=>$request->name,
             'password'=>bcrypt($request->password),
