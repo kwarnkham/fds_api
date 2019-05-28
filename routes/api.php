@@ -18,4 +18,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::post('/user/create', 'UserController@store');
-Route::post('/api_token/create', 'ApiTokenController@create');
+Route::post('/api_token/create', 'ApiTokenController@store');

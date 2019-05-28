@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\User;
 use Illuminate\Support\Str;
+
 class UserController extends Controller
 {
     /**
@@ -41,14 +42,15 @@ class UserController extends Controller
             'password' => 'required|confirmed'
         ]);
 
-        $result=User::create([
+        $token=Str::random(60);
+        User::create([
             'name'=>$request->name,
             'password'=>bcrypt($request->password),
             'mobile'=>$request->mobile,
-            'api_token' => Str::random(60)
+            'api_token' => hash('sha256', $token)
         ]);
-
-        return array('result'=>$result);
+        $json=array('message'=>'ok', 'token'=>$token);
+        return $json;
     } 
 
     /**
