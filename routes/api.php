@@ -19,3 +19,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::post('/user/create', 'UserController@store');
 Route::post('/api_token/create', 'ApiTokenController@store');
+
+Route::middleware('auth:api')->post('/api_token/destroy', 'ApiTokenController@destroy');

@@ -39,10 +39,12 @@ class ApiTokenController extends Controller
             'mobile' => 'required|digits_between:7,9',
             'password' => 'required'
         ]);
+
         $user = User::where('mobile', $request->mobile)->first();
         if ($user == null) {
             return ['message' => 'Records do not match'];
         }
+
         if ($user != null) {
             if (Hash::check($request->password, $user->password)) {
                 $token = Str::random(60);
@@ -50,6 +52,8 @@ class ApiTokenController extends Controller
                     'api_token' => hash('sha256', $token),
                 ])->save();
                 return ['message' => 'Log in successful.', 'token' => $token];
+            } else {
+                return ['message' => 'Records do not match'];
             }
         }
         // return array('result'=>$request);
@@ -95,8 +99,19 @@ class ApiTokenController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        $user = $request->user();
+        if ($user == null) {
+            return ['message' => 'token expired', 'reason'=>'no user']; //useless
+            die();
+        }
+        $user->api_token = null;
+        if ($user->save()) {
+            return ['message' => 'Logged out successfully'];
+            die();
+        }
+
+        return ['message' => 'token expired', 'reason'=>'action failed'];
     }
 }

@@ -49,7 +49,7 @@ class UserController extends Controller
             'mobile'=>$request->mobile,
             'api_token' => hash('sha256', $token)
         ]);
-        $json=array('message'=>'ok', 'token'=>$token);
+        $json=array('message'=>'Registraion Successful', 'token'=>$token);
         return $json;
     } 
 
