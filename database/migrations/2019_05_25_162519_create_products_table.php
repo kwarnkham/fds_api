@@ -18,6 +18,7 @@ class CreateProductsTable extends Migration
             $table->string('name');
             $table->integer('price');
             $table->integer('stock');
+            $table->text('description');
             $table->unsignedBigInteger('product_picture_id');
             $table->timestamps();
 
