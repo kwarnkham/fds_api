@@ -26,6 +26,7 @@ class FoodOrderController extends Controller
             $new_user->address = $request->address;
             $new_user->save();
         }
+        //store order info
         $new_order = FoodOrder::create([
             'user_id' => $new_user->id,
             'mobile' => $request->mobile,
