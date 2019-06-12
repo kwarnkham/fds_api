@@ -17,7 +17,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('/user/create', 'UserController@store');
-Route::post('/api_token/create', 'ApiTokenController@store');
+// Route::post('/user/create', 'UserController@store');
+// Route::post('/api_token/create', 'ApiTokenController@store');
 
-Route::middleware('auth:api')->post('/api_token/destroy', 'ApiTokenController@destroy');
+// Route::middleware('auth:api')->post('/api_token/destroy', 'ApiTokenController@destroy');
+
+Route::post('/order/submit', 'FoodOrderController@store');
