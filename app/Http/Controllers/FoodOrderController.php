@@ -26,15 +26,27 @@ class FoodOrderController extends Controller
             $new_user->address = $request->address;
             $new_user->save();
         }
-        //store order info
-        $new_order = FoodOrder::create([
-            'user_id' => $new_user->id,
+
+        $amount=0;
+        foreach($request->cartItem as $product){
+            $amount += $product['amount'];
+        }
+
+        $new_order= $new_user->food_orders()->create([
             'mobile' => $request->mobile,
-            'address' => $request->address
+            'address' => $request->address,
+            'note' => $request->note,
+            'amount' => $amount
         ]);
+        
+        foreach($request->cartItem as $product){
+            $new_order->products()->attach($product['id'], ['quantity'=>$product['quantity']]);
+        }
+        // $new_order->products()->attach();
+
         //record order [user_id, product_id, quantity, amount, address, mobile]
         //resend order id
 
-        return $new_order;
+        return ['order_id'=>$new_order->id];
     }
 }

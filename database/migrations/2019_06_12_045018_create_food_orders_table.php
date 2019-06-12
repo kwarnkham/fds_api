@@ -19,6 +19,7 @@ class CreateFoodOrdersTable extends Migration
             $table->unsignedBigInteger('amount')->nullable();
             $table->text('address');
             $table->string('mobile');
+            $table->text('note');
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users');
         });

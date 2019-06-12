@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class FoodOrder extends Model
 {
     protected $fillable = [
-        'user_id','amount', 'address', 'mobile'
+        'user_id','amount', 'address', 'mobile', 'note'
     ];
 
     public function user(){
@@ -15,6 +15,6 @@ class FoodOrder extends Model
     }
 
     public function products(){
-        return $this->belongsToMany('App\Product');
+        return $this->belongsToMany('App\Product')->withTimestamps();
     }
 }
