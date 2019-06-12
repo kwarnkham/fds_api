@@ -36,4 +36,8 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function food_orders(){
+        return $this->hasMany('App\FoodOrder');
+    }
 }
