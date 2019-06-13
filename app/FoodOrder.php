@@ -15,6 +15,6 @@ class FoodOrder extends Model
     }
 
     public function products(){
-        return $this->belongsToMany('App\Product')->withTimestamps();
+        return $this->belongsToMany('App\Product')->withTimestamps()->withPivot('quantity');;
     }
 }

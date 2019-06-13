@@ -16,10 +16,12 @@ class CreateFoodOrdersTable extends Migration
         Schema::create('food_orders', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('amount')->nullable();
+            $table->unsignedBigInteger('amount');
             $table->text('address');
             $table->string('mobile');
-            $table->text('note');
+            $table->text('note')->nullable();
+            $table->text('admin_note')->nullable();
+            $table->string('status')->default('unconfirmed');
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users');
         });

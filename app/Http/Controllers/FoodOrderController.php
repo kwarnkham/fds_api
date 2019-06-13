@@ -8,9 +8,17 @@ use App\FoodOrder;
 
 class FoodOrderController extends Controller
 {
-    public function store(Request $request)
+    public function store(Request $request) //proper error flow handling should be applied
     {
-        //new user create one
+        //validate request
+        $request->validate([
+            'name' => 'required',
+            'mobile' => 'required|digits_between:7,9',
+            'address' => 'required',
+            'cartItem' => 'required|min:1'
+        ]);
+
+        //new user, make one
         $user = User::where('mobile', $request->mobile)->get();
         if (count($user) == 0) {
             $new_user = User::create([
@@ -19,6 +27,7 @@ class FoodOrderController extends Controller
                 'address' => $request->address
             ]);
         }
+
         //old user, update info
         if (count($user) > 0) {
             $new_user = User::find($user[0]->id);
@@ -27,26 +36,47 @@ class FoodOrderController extends Controller
             $new_user->save();
         }
 
-        $amount=0;
-        foreach($request->cartItem as $product){
+        //calculating amount
+        $amount = 0;
+        foreach ($request->cartItem as $product) {
             $amount += $product['amount'];
         }
 
-        $new_order= $new_user->food_orders()->create([
+        //storing order
+        $new_order = $new_user->food_orders()->create([
             'mobile' => $request->mobile,
             'address' => $request->address,
             'note' => $request->note,
             'amount' => $amount
         ]);
-        
-        foreach($request->cartItem as $product){
-            $new_order->products()->attach($product['id'], ['quantity'=>$product['quantity']]);
+
+        //pivot table storing
+        foreach ($request->cartItem as $product) {
+            $new_order->products()->attach($product['id'], ['quantity' => $product['quantity']]);
         }
-        // $new_order->products()->attach();
 
-        //record order [user_id, product_id, quantity, amount, address, mobile]
-        //resend order id
+        //resend stored order_id
+        return ['message' => 'OK', 'order_id' => $new_order->id];
+    }
 
-        return ['order_id'=>$new_order->id];
+    public function show(Request $request)
+    {
+        $request->validate([
+            'order_id' => 'required|numeric',
+            'mobile' => 'required|numeric'
+        ]);
+
+        $order = FoodOrder::find($request->order_id);
+        if ($order == null) {
+            return ['message' => 'No Order'];
+        }
+        if ($order != null) {
+            if ($order->user->mobile != $request->mobile) {
+                return ['message' => 'No Order'];
+            }
+            if ($order->user->mobile == $request->mobile) {
+                return ['message' => 'OK', 'data' => $order->load('user', 'products')];
+            }
+        }
     }
 }
