@@ -13,4 +13,10 @@ class Product extends Model
     public function product_pictures(){
         return $this->hasMany('App\ProductPicture');
     }
+
+    protected $fillable = [
+        'name', 'price','description'
+    ];
+
+    
 }
