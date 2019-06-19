@@ -25,3 +25,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::post('/order/submit', 'FoodOrderController@store');
 Route::get('/order', 'FoodOrderController@show');
 Route::post('/product/create', 'ProductController@store');
+Route::get('/product/index', 'ProductController@index');
