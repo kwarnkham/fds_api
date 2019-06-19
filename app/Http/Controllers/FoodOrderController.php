@@ -75,7 +75,7 @@ class FoodOrderController extends Controller
                 return ['message' => 'No Order'];
             }
             if ($order->user->mobile == $request->mobile) {
-                return ['message' => 'OK', 'data' => $order->load('user', 'products')];
+                return ['message' => 'OK', 'order' => $order->load('user', 'products')];
             }
         }
     }
