@@ -59,7 +59,7 @@ class FoodOrderController extends Controller
         return ['message' => 'OK', 'order_id' => $new_order->id];
     }
 
-    public function show(Request $request)
+    public function track(Request $request)
     {
         $request->validate([
             'order_id' => 'required|numeric',
@@ -78,5 +78,21 @@ class FoodOrderController extends Controller
                 return ['message' => 'OK', 'order' => $order->load('user', 'products')];
             }
         }
+    }
+
+    public function index()
+    {
+        $orders = FoodOrder::all();
+        return ['message' => 'OK', 'orders' => $orders];
+    }
+
+    public function show(Request $request)
+    {
+        $request->validate([
+            'order_id' => 'required| numeric'
+        ]);
+
+        $order = FoodOrder::find($request->order_id)->load('user', 'products');
+        return  ['message'=>'OK', 'order'=>$order];
     }
 }

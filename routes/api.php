@@ -23,6 +23,9 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 // Route::middleware('auth:api')->post('/api_token/destroy', 'ApiTokenController@destroy');
 
 Route::post('/order/submit', 'FoodOrderController@store');
-Route::get('/order', 'FoodOrderController@show');
+Route::get('/order/track', 'FoodOrderController@track');
+Route::get('/order/index', 'FoodOrderController@index');
+Route::get('/order/show', 'FoodOrderController@show');
+
 Route::post('/product/create', 'ProductController@store');
 Route::get('/product/index', 'ProductController@index');
