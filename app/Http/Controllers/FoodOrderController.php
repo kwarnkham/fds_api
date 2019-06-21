@@ -92,7 +92,22 @@ class FoodOrderController extends Controller
             'order_id' => 'required| numeric'
         ]);
 
-        $order = FoodOrder::find($request->order_id)->load('user', 'products');
-        return  ['message'=>'OK', 'order'=>$order];
+        $order = FoodOrder::find($request->order_id)->load('user', 'products.product_pictures');
+        return  ['message' => 'OK', 'order' => $order];
+    }
+
+    public function update(Request $request)
+    {
+        $request->validate([
+            'order_id' => 'required| numeric',
+            'action' => 'required'
+        ]);
+
+        if ($request->action == 'confirm') {
+            FoodOrder::where('id', $request->order_id)->update(['status' => 'confirmed']);
+            return ['message' => 'OK'];
+        } else {
+            return ['message' => 'Invalid Action'];
+        }
     }
 }
