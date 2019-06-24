@@ -1,7 +1,19 @@
 <?php
-// header('Access-Control-Allow-Origin: *');
-// header('Access-Control-Allow-Methods: GET, POST, PATCH, PUT, DELETE, OPTIONS');
-// header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token');
+$allowedOrigins = array(
+    '(http(s)://)?(www\.)?foodds\.ml', // Laravel API Domain
+    'https://foodds.tk' // VueJS CLient
+ );
+ if (isset($_SERVER['HTTP_ORIGIN']) && $_SERVER['HTTP_ORIGIN'] != '') {
+    foreach ($allowedOrigins as $allowedOrigin) {
+       if (preg_match('#' . $allowedOrigin . '#', $_SERVER['HTTP_ORIGIN'])) {
+          header('Access-Control-Allow-Origin: ' . $_SERVER['HTTP_ORIGIN']);
+          header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE, OPTIONS');
+          header('Access-Control-Max-Age: 1000');
+          header('Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With');
+          break;
+       }
+    }
+ }
 /**
  * Laravel - A PHP Framework For Web Artisans
  *
