@@ -106,6 +106,26 @@ class FoodOrderController extends Controller
         if ($request->action == 'confirm') {
             FoodOrder::where('id', $request->order_id)->update(['status' => 'confirmed']);
             return ['message' => 'OK'];
+        }
+        if ($request->action == 'deliver') {
+            FoodOrder::where('id', $request->order_id)->update(['status' => 'delivered']);
+            return ['message' => 'OK'];
+        }
+        if ($request->action == 'cancel') {
+            $order = FoodOrder::where('id', $request->order_id)->first();
+            if ($order->note == null) {
+                $note = 'Canceled at status ' . $order->status;
+                FoodOrder::where('id', $request->order_id)->update(['status' => 'canceled', 'note' => $note]);
+            }
+            if ($order->note != null) {
+                $note = $order->note . '. Canceled at status ' . $order->status;
+                FoodOrder::where('id', $request->order_id)->update(['status' => 'canceled', 'note' => $note]);
+            }
+            return ['message' => 'OK'];
+        }
+        if ($request->action == 'complete') {
+            FoodOrder::where('id', $request->order_id)->update(['status' => 'completed']);
+            return ['message' => 'OK'];
         } else {
             return ['message' => 'Invalid Action'];
         }
