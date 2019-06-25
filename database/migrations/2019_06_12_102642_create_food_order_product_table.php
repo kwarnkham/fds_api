@@ -17,6 +17,7 @@ class CreateFoodOrderProductTable extends Migration
             $table->unsignedBigInteger('food_order_id');
             $table->unsignedBigInteger('product_id');
             $table->unsignedInteger('quantity');
+            $table->text('note')->nullable();
             $table->timestamps();
             $table->foreign('food_order_id')->references('id')->on('food_orders');
             $table->foreign('product_id')->references('id')->on('products');

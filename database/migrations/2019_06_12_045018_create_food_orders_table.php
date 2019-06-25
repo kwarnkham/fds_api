@@ -19,7 +19,6 @@ class CreateFoodOrdersTable extends Migration
             $table->unsignedBigInteger('amount');
             $table->text('address');
             $table->string('mobile');
-            $table->text('note')->nullable();
             $table->text('admin_note')->nullable();
             $table->string('status')->default('unconfirmed');
             $table->timestamps();
