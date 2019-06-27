@@ -27,6 +27,7 @@ Route::get('/order/track', 'FoodOrderController@track');
 Route::get('/order/index', 'FoodOrderController@index');
 Route::get('/order/show', 'FoodOrderController@show');
 Route::post('/order/update', 'FoodOrderController@update');
+Route::post('/order/update_admin_note', 'FoodOrderController@update_admin_note');
 
 Route::post('/product/create', 'ProductController@store');
 Route::get('/product/index', 'ProductController@index');

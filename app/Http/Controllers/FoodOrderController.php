@@ -46,13 +46,15 @@ class FoodOrderController extends Controller
         $new_order = $new_user->food_orders()->create([
             'mobile' => $request->mobile,
             'address' => $request->address,
-            'note' => $request->note,
             'amount' => $amount
         ]);
 
         //pivot table storing
         foreach ($request->cartItem as $product) {
-            $new_order->products()->attach($product['id'], ['quantity' => $product['quantity']]);
+            $new_order->products()->attach($product['id'], [
+                'quantity' => $product['quantity'],
+                'note' => $product['note']
+            ]);
         }
 
         //resend stored order_id
@@ -113,13 +115,13 @@ class FoodOrderController extends Controller
         }
         if ($request->action == 'cancel') {
             $order = FoodOrder::where('id', $request->order_id)->first();
-            if ($order->note == null) {
+            if ($order->admin_note == null) {
                 $note = 'Canceled at status ' . $order->status;
-                FoodOrder::where('id', $request->order_id)->update(['status' => 'canceled', 'note' => $note]);
+                FoodOrder::where('id', $request->order_id)->update(['status' => 'canceled', 'admin_note' => $note]);
             }
-            if ($order->note != null) {
-                $note = $order->note . '. Canceled at status ' . $order->status;
-                FoodOrder::where('id', $request->order_id)->update(['status' => 'canceled', 'note' => $note]);
+            if ($order->admin_note != null) {
+                $note = $order->admin_note . '. Canceled at status ' . $order->status;
+                FoodOrder::where('id', $request->order_id)->update(['status' => 'canceled', 'admin_note' => $note]);
             }
             return ['message' => 'OK'];
         }
@@ -129,5 +131,16 @@ class FoodOrderController extends Controller
         } else {
             return ['message' => 'Invalid Action'];
         }
+    }
+
+    public function update_admin_note(Request $request)
+    {
+        $request->validate([
+            'order_id' => 'required| numeric',
+            'admin_note' => 'required'
+        ]);
+
+        FoodOrder::where('id', $request->order_id)->update(['admin_note' => $request->admin_note]);
+        return ['message' => 'OK'];
     }
 }
